@@ -19,7 +19,7 @@ def get_messages():
         unread_counter = deep_get(i, 'conversation.unread_count')
         print(ides, unread_counter)
 
-        dirty_messages = api.messages.getHistory(count=4, user_id=ides)
+        dirty_messages = api.messages.getHistory(user_id=ides)
         for ii in dirty_messages.get('items'):
             if ii.get('attachments'):
                 for attachments in deep_get(ii, 'attachments'):
@@ -64,4 +64,18 @@ def send_messages():
     message = input("Enter message to send: ")
     api.messages.send(peer_id=dialog, message=message, random_id=randint(-2147483648, 2147483647)) #random_int is unique int32
 
-send_messages()
+def user_interface():
+    print("last 10 dialogs")
+    get_dialogs(10)
+    answ = input("What you want to do:\n1.Send message 2.Get more dialogs 3.Get history")
+    if answ == 1:
+        send_messages()
+    if answ == 2:
+        count = input("How many?")
+        get_dialogs(count)
+    if answ == 3:
+        get_messages()
+
+
+if __name__ == "__main__":
+    user_interface()
